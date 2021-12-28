@@ -26,10 +26,19 @@ class Game():
 
     def is_finished(self):
         if self.board.placable_index() == []:
-            return True
+            self.result = DRAW
 
         self.result = self.board.judge_winner()
-        return self.result == RED or self.result == BLUE
+        return self.result is not None
+
+    def is_win(self):
+        return self.result == self.START_PLAYER
+
+    def is_lose(self):
+        return self.result == -self.START_PLAYER
+
+    def is_draw(self):
+        return self.result == DRAW
 
     def is_first_player(self):
         return self.player == self.START_PLAYER
