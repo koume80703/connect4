@@ -19,6 +19,9 @@ def main():
         else:
             action = game.random_action()
             game.next_state(action)
+
+    game.board.show_board()
+    game.show_result()
     
     return
 

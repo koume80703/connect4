@@ -19,7 +19,12 @@ class Game():
 
     
     def next_state(self, action):
-        self.board.set_stone(*action)
+        self.board.set_stone(*action, self.player)
+
+        self.set_order.append(action)
+
+        self.turn += 1
+        self.player = RED if self.player == BLUE else BLUE
 
     def random_action(self):
         return choice(self.board.placable_index())
@@ -46,8 +51,13 @@ class Game():
     def next_player(self):
         return BLUE if self.player == RED else RED
     
-    def player_to_str(self, player):
-        if player == RED:
+    def result_to_str(self, result):
+        if result == RED:
             return "RED"
-        if player == BLUE:
+        if result == BLUE:
             return "BLUE"
+        if result == DRAW:
+            return "DRAW"
+
+    def show_result(self):
+        print(f"winner: {self.result_to_str(self.result)}")

@@ -8,7 +8,7 @@ class Node():
         self.w = 0
         self.n = 0
         self.expand_base = expand_base
-        self.children = None
+        self.children = []
 
     def evaluate(self):
         if self.game.is_finished():
@@ -23,7 +23,7 @@ class Node():
 
             return value
 
-        if self.children is None:
+        if self.children == []:
             value = Node.playout(deepcopy(self.game))
             self.w += value
             self.n += 1
@@ -41,18 +41,23 @@ class Node():
 
     def expand(self):
         if self.game.board.placable_index() == []:
-            return
-        self.children = [Node(deepcopy(self.game).next_state(action), self.expand_base) for action in self.game.board.placable_index()]
+            return        
+        for action in self.game.board.placable_index():
+            print(f"action: {action}")
+            self.children.append(Node(deepcopy(self.game).next_state(action), self.expand_base))
+        print(len(self.children))
 
     def next_child_based_ucb(self):
-        for child in self.children:
-            if child.n == 0:
+        for child in self.children:            
+            if child.n == 0:                
                 return child
 
         sum_n = sum([child.n for child in self.children])
         ucb1_values = [ucb1(sum_n, child.n, child.w) for child in self.children]
+        child = self.children[argmax(ucb1_values)]
 
-        return self.children[argmax(ucb1_values)]
+        return child 
+        
 
     def playout(cls, game):
         if game.is_finished():

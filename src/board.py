@@ -29,7 +29,7 @@ class Board():
 
     def placable_index(self):
         placable = []
-        for x in range(1,self.ROW_SIZE-1):
+        for x in range(1, self.ROW_SIZE-1):
             for y in range(1, self.COL_SIZE-1)[::-1]:
                 if self.board[y, x] == EMPTY:
                     placable.append((x, y))
