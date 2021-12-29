@@ -43,9 +43,10 @@ class Node():
         if self.game.board.placable_index() == []:
             return        
         for action in self.game.board.placable_index():
-            print(f"action: {action}")
-            self.children.append(Node(deepcopy(self.game).next_state(action), self.expand_base))
-        print(len(self.children))
+            tmp = deepcopy(self.game)
+            tmp.next_state(action)
+            
+            self.children.append(Node(tmp, self.expand_base))
 
     def next_child_based_ucb(self):
         for child in self.children:            
@@ -58,7 +59,7 @@ class Node():
 
         return child 
         
-
+    @classmethod
     def playout(cls, game):
         if game.is_finished():
             if game.is_win():
@@ -68,4 +69,5 @@ class Node():
             else:
                 return 0
 
-        return Node.playout(game.next_state(game.random_action()))
+        game.next_state(game.random_action())
+        return Node.playout(game)

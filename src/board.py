@@ -12,7 +12,7 @@ class Board():
     COL_SIZE = 6+2 #縦方向の大きさ
 
     def __init__(self):
-        self.board = np.zeros((self.ROW_SIZE, self.COL_SIZE), dtype = int)
+        self.board = np.zeros((self.COL_SIZE, self.ROW_SIZE), dtype = int)
 
         #外周を壁とする
         self.board[0, :] = WALL
@@ -85,13 +85,13 @@ class Board():
         print("--" * 20)
         for y in range(self.COL_SIZE):
             for x in range(self.ROW_SIZE):
-                if self.board[x, y] == 0:
+                if self.board[y, x] == 0:
                     print("* ", end = "")
-                elif self.board[x, y] == 2:
+                elif self.board[y, x] == 2:
                     print(". ", end = "")
-                elif self.board[x, y] == -1:
+                elif self.board[y, x] == -1:
                     print("R ", end = "")
-                elif self.board[x, y] == 1:
+                elif self.board[y, x] == 1:
                     print("B ", end = "")
             else:
                 print("\n", end = "")

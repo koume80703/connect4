@@ -27,6 +27,7 @@ class Game():
         self.player = RED if self.player == BLUE else BLUE
 
     def random_action(self):
+        print(self.board.placable_index)
         return choice(self.board.placable_index())
 
     def is_finished(self):
