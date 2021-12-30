@@ -14,7 +14,7 @@ def play_connect4():
             action = game.mcts_player()
             game.next_state(action)
         else:
-            action = game.random_player()
+            action = game.mcts_player(expand_base=100, simulation=1000)
             game.next_state(action)
 
     game.board.show_board()
