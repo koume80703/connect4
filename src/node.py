@@ -1,22 +1,25 @@
+from __future__ import annotations
+
 from copy import deepcopy
 from mcts.util.argmax import argmax
 from mcts.util.ucb1 import ucb1
 
 
 class Node():
-    def __init__(self, game, expand_base=20):
+    def __init__(self, game, base_player, expand_base=20):
         self.game = game
         self.w = 0
         self.n = 0
         self.expand_base = expand_base
         self.children = []
+        self.base_player = base_player
 
     def evaluate(self):
         if self.game.is_finished():
             value = 0
-            if self.game.is_win():
+            if self.game.is_win(self.base_player):
                 value = 1
-            elif self.game.is_lose():
+            elif self.game.is_lose(self.base_player):
                 value = -1
 
             self.w += value
@@ -25,7 +28,7 @@ class Node():
             return value
 
         if self.children == []:
-            value = Node.playout(deepcopy(self.game))
+            value = Node.playout(deepcopy(self.game), self.base_player)
             self.w += value
             self.n += 1
 
@@ -62,15 +65,15 @@ class Node():
         return child
 
     @classmethod
-    def playout(cls, game):
+    def playout(cls, game, base_player):
         if game.is_finished():
-            if game.is_win():
+            if game.is_win(base_player):
                 return 1
-            elif game.is_lose():
+            elif game.is_lose(base_player):
                 return -1
             else:
                 return 0
         else:
             game.next_state(game.random_action())
 
-        return Node.playout(game)
+        return Node.playout(game, base_player)

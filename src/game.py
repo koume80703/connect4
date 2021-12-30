@@ -40,11 +40,11 @@ class Game():
             self.result = self.board.judge_winner()
         return self.result is not None
 
-    def is_win(self):
-        return self.result == self.START_PLAYER
+    def is_win(self, base_player):
+        return self.result == base_player
 
-    def is_lose(self):
-        return self.result == -self.START_PLAYER
+    def is_lose(self, base_player):
+        return self.result == -base_player
 
     def is_draw(self):
         return self.result == DRAW
@@ -55,8 +55,8 @@ class Game():
     def next_player(self):
         return BLUE if self.player == RED else RED
 
-    def mcts_player(self, expand_base: int = 20, simulation: int = 100):
-        root_node = Node(self, expand_base=expand_base)
+    def mcts_player(self, player_name, expand_base: int = 20, simulation: int = 100):
+        root_node = Node(self, player_name, expand_base=expand_base)
         MCTS.train(root_node=root_node, simulation=simulation)
         action = MCTS.select_action(root_node)
 
