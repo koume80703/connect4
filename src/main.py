@@ -1,29 +1,45 @@
-from board import Board
 from game import Game
-from mcts.mcts import MCTS
-from node import Node
 
 
-def main():
+RED = -1
+BLUE = 1
+DRAW = 0
+
+
+def play_connect4():
     game = Game()
-    
-    i = 0
+
     while not game.is_finished():
         if game.is_first_player():
-            root_node = Node(game, expand_base = 20)
-
-            MCTS.train(root_node = root_node, simulation=100)
-            action = MCTS.select_action(root_node)
-
+            action = game.mcts_player()
             game.next_state(action)
         else:
-            action = game.random_action()
+            action = game.random_player()
             game.next_state(action)
 
     game.board.show_board()
     game.show_result()
-    
-    return
+
+    return game.result
+
+
+def main():
+    game_num = 100
+    n_win, n_lose, n_draw = 0, 0, 0
+    for i in range(game_num):
+        print(f"<play {i}>")
+        result = play_connect4()
+        if result == RED:
+            n_win += 1
+        elif result == BLUE:
+            n_lose += 1
+        elif result == DRAW:
+            n_draw += 1
+        else:
+            print("result was illegal value")
+
+    print(f"win: {n_win}, lose: {n_lose}, draw: {n_draw}")
+
 
 if __name__ == "__main__":
     main()

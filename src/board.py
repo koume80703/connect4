@@ -1,4 +1,7 @@
+# from __future__ import annotations
+
 import sys
+from typing import Tuple, List, Any
 
 import numpy as np
 
@@ -7,27 +10,28 @@ WALL = 2
 RED = -1
 BLUE = 1
 
+
 class Board():
-    ROW_SIZE = 7+2 #横方向の大きさ
-    COL_SIZE = 6+2 #縦方向の大きさ
+    ROW_SIZE = 7+2  # 横方向の大きさ
+    COL_SIZE = 6+2  # 縦方向の大きさ
 
     def __init__(self):
-        self.board = np.zeros((self.COL_SIZE, self.ROW_SIZE), dtype = int)
+        self.board = np.zeros(
+            (self.COL_SIZE, self.ROW_SIZE), dtype=np.int32)
 
-        #外周を壁とする
+        # 外周を壁とする
         self.board[0, :] = WALL
         self.board[:, 0] = WALL
         self.board[-1, :] = WALL
         self.board[:, -1] = WALL
 
-    def set_stone(self, x : int, y : int, player : int):
+    def set_stone(self, x: int, y: int, player: int):
         if self.board[y, x] != EMPTY:
             return False
-        
         self.board[y, x] = player
         return True
 
-    def placable_index(self):
+    def placable_index(self) -> List[Tuple[int, int]]:
         placable = []
         for x in range(1, self.ROW_SIZE-1):
             for y in range(1, self.COL_SIZE-1)[::-1]:
@@ -41,7 +45,7 @@ class Board():
 
         return placable
 
-    def judge_winner(self):
+    def judge_winner(self) -> Any:
         for y in range(1, self.COL_SIZE-1)[::-1]:
             for x in range(1, self.ROW_SIZE-1):
                 board_type = self.board[y, x]
@@ -50,12 +54,12 @@ class Board():
                 if board_type == RED or board_type == BLUE:
                     if self.judge_consecutive_stone(x, y, board_type):
                         return board_type
-                        
-    def judge_consecutive_stone(self, x, y, player):
+
+    def judge_consecutive_stone(self, x: int, y: int, player: int) -> bool:
         PREV, NEXT = -1, 1
         ROW_DIRECTION = [PREV, 0, NEXT]
-        COL_DIRECTION = [0, NEXT]        
-        
+        COL_DIRECTION = [0, NEXT]
+
         for dy in COL_DIRECTION:
             for dx in ROW_DIRECTION:
                 if dx == 0 and dy == 0:
@@ -86,16 +90,16 @@ class Board():
         for y in range(self.COL_SIZE):
             for x in range(self.ROW_SIZE):
                 if self.board[y, x] == 0:
-                    print("* ", end = "")
+                    print("* ", end="")
                 elif self.board[y, x] == 2:
-                    print(". ", end = "")
+                    print(". ", end="")
                 elif self.board[y, x] == -1:
-                    print("R ", end = "")
+                    print("R ", end="")
                 elif self.board[y, x] == 1:
-                    print("B ", end = "")
+                    print("B ", end="")
             else:
-                print("\n", end = "")
+                print("\n", end="")
         print("--" * 20)
 
-    def get_board(self):
+    def get_board(self) -> np.ndarray:
         return self.board
