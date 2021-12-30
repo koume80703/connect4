@@ -11,12 +11,15 @@ START_PLAYER = RED
 def play_connect4():
     game = Game()
 
+    action = game.random_player(RED)
+    game.next_state(action)
+
     while not game.is_finished():
         if game.is_first_player():
             action = game.mcts_player(RED)
             game.next_state(action)
         else:
-            action = game.mcts_player(BLUE, expand_base=100, simulation=1000)
+            action = game.mcts_player(BLUE, expand_base=50, simulation=500)
             game.next_state(action)
 
     game.board.show_board()

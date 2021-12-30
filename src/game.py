@@ -62,7 +62,7 @@ class Game():
 
         return action
 
-    def random_player(self):
+    def random_player(self, player):
         return self.random_action()
 
     def result_to_str(self, result: Union[None, int]):
